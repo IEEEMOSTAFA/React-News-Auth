@@ -3,9 +3,12 @@ import { Link, NavLink } from 'react-router-dom';
 import userDefaultPic from '../../../assets/user.png'
 const Navbar = () => {
   const navLinks = <>
+  
     <li><NavLink to="/">Home</NavLink></li>
     <li><NavLink to="/about">About</NavLink></li>
     <li><NavLink to="/career">Career</NavLink></li>
+    <li><NavLink to="/login">Login</NavLink></li>
+    <li><NavLink to="/register">Register</NavLink></li>
 
   </>
   return (
@@ -47,7 +50,7 @@ const Navbar = () => {
               src= {userDefaultPic} />
           </div>
         </div>
-        <Link><button className='btn btn-outline btn-warning'>Login</button></Link>
+        <Link to="/login"><button className='btn btn-outline btn-warning'>Login</button></Link>
 
       </div>
     </div>
