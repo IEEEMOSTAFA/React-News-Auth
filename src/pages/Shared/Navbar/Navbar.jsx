@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import userDefaultPic from '../../../assets/user.png'
-const Navbar = () => {
-  const navLinks = <>
-  
-    <li><NavLink to="/">Home</NavLink></li>
-    <li><NavLink to="/about">About</NavLink></li>
-    <li><NavLink to="/career">Career</NavLink></li>
-    <li><NavLink to="/login">Login</NavLink></li>
-    <li><NavLink to="/register">Register</NavLink></li>
+import userDefaultPic from '../../../assets/user.png';
+import { AuthContext } from '../../../providers/AuthProvider';
 
-  </>
+const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    logOut()
+      .then(() => {
+        console.log('User signed out successfully');
+      })
+      .catch((error) => {
+        console.error('Error signing out:', error);
+      });
+  };
+
+  const navLinks = (
+    <>
+      <li><NavLink to="/">Home</NavLink></li>
+      <li><NavLink to="/about">About</NavLink></li>
+      <li><NavLink to="/career">Career</NavLink></li>
+      {!user && <li><NavLink to="/login">Login</NavLink></li>}
+      {!user && <li><NavLink to="/register">Register</NavLink></li>}
+    </>
+  );
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -26,7 +41,8 @@ const Navbar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16" />
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
             </svg>
           </div>
           <ul
@@ -35,23 +51,33 @@ const Navbar = () => {
             {navLinks}
           </ul>
         </div>
-
       </div>
+      
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           {navLinks}
         </ul>
       </div>
-      <div className="navbar-end">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-          <div className="w-10 rounded-full">
-            <img
-              alt="Tailwind CSS Navbar component"
-              src= {userDefaultPic} />
-          </div>
-        </div>
-        <Link to="/login"><button className='btn btn-outline btn-warning'>Login</button></Link>
 
+      <div className="navbar-end">
+        {user && (
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+            <div className="w-10 rounded-full">
+              <img
+                alt="User Avatar"
+                src={user.photoURL || userDefaultPic}
+              />
+            </div>
+          </div>
+        )}
+
+        {user ? (
+          <button onClick={handleSignOut} className="btn">Sign Out</button>
+        ) : (
+          <Link to="/login">
+            <button className="btn btn-outline btn-warning">Login</button>
+          </Link>
+        )}
       </div>
     </div>
   );

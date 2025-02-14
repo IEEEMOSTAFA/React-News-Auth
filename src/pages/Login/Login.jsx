@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Navbar from '../Shared/Navbar/Navbar';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../providers/AuthProvider';
 
 const Login = () => {
-    const handleLogin = e => {
+    const { signIn } = useContext(AuthContext); // Fixed typo
+
+    const handleLogin = (e) => {
         e.preventDefault();
-        // console.log(e.currentTarget)
         const form = new FormData(e.currentTarget);
-        console.log(form.get('password'));
-        const formDataObject = Object.fromEntries(form.entries());
-        console.log(formDataObject);
+        const email = form.get('email');
+        const password = form.get('password');
+
+        console.log('Email:', email, 'Password:', password);
+
+        signIn(email, password)
+            .then((result) => {
+                console.log('User logged in:', result.user);
+            })
+            .catch((error) => {
+                console.error('Login error:', error);
+            });
     };
 
     return (
@@ -42,10 +53,10 @@ const Login = () => {
                                 <a href="#" className="text-sm text-blue-500 hover:underline">Forgot password?</a>
                             </div>
                         </div>
-                        <button className="btn btn-primary w-full">Login</button>
+                        <button type="submit" className="btn btn-primary w-full">Login</button>
                     </form>
                     <p className="text-sm text-center text-gray-600">
-                        Don't have an account? <Link  to="/register" className="text-blue-500 hover:underline">Register</Link>
+                        Don't have an account? <Link to="/register" className="text-blue-500 hover:underline">Register</Link>
                     </p>
                 </div>
             </div>
