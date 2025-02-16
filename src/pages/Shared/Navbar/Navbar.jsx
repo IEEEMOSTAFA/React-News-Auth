@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import userDefaultPic from '../../../assets/user.png';
 import { AuthContext } from '../../../providers/AuthProvider';
@@ -8,12 +8,8 @@ const Navbar = () => {
 
   const handleSignOut = () => {
     logOut()
-      .then(() => {
-        console.log('User signed out successfully');
-      })
-      .catch((error) => {
-        console.error('Error signing out:', error);
-      });
+      .then(() => console.log('User signed out successfully'))
+      .catch((error) => console.error('Error signing out:', error));
   };
 
   const navLinks = (
@@ -21,13 +17,18 @@ const Navbar = () => {
       <li><NavLink to="/">Home</NavLink></li>
       <li><NavLink to="/about">About</NavLink></li>
       <li><NavLink to="/career">Career</NavLink></li>
-      {!user && <li><NavLink to="/login">Login</NavLink></li>}
-      {!user && <li><NavLink to="/register">Register</NavLink></li>}
+      {!user && (
+        <>
+          <li><NavLink to="/login">Login</NavLink></li>
+          <li><NavLink to="/register">Register</NavLink></li>
+        </>
+      )}
     </>
   );
 
   return (
     <div className="navbar bg-base-100">
+      {/* Mobile Menu */}
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -52,27 +53,25 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-      
+
+      {/* Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           {navLinks}
         </ul>
       </div>
 
-      <div className="navbar-end">
-        {user && (
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <img
-                alt="User Avatar"
-                src={user.photoURL || userDefaultPic}
-              />
-            </div>
-          </div>
-        )}
-
+      {/* User Authentication Section */}
+      <div className="navbar-end flex items-center gap-3">
         {user ? (
-          <button onClick={handleSignOut} className="btn">Sign Out</button>
+          <>
+            <div className="avatar">
+              <div className="w-10 rounded-full">
+                <img alt="User Avatar" src={user.photoURL || userDefaultPic} />
+              </div>
+            </div>
+            <button onClick={handleSignOut} className="btn btn-warning">Sign Out</button>
+          </>
         ) : (
           <Link to="/login">
             <button className="btn btn-outline btn-warning">Login</button>
