@@ -1,10 +1,15 @@
 import React, { useContext } from 'react';
 import Navbar from '../Shared/Navbar/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 
 const Login = () => {
     const { signIn } = useContext(AuthContext); // Fixed typo
+    const location = useLocation();
+    const navigate = useNavigate();
+    // this console show where my location go
+    console.log('locatin in the login page',location)
+
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -17,6 +22,9 @@ const Login = () => {
         signIn(email, password)
             .then((result) => {
                 console.log('User logged in:', result.user);
+
+                // navigate after login
+                navigate(location?.state ? location.state : '/');
             })
             .catch((error) => {
                 console.error('Login error:', error);
